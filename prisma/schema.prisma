@@ -1,0 +1,65 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+
+  id         String    @id @default(cuid())
+  email      String    @unique @db.VarChar(100)
+  password   String    @db.VarChar(200)
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  posts    Post[]
+  comments Comment[]
+
+  @@map(name: "users")
+}
+
+model Post {
+
+  id         String    @id @default(cuid())
+  title      String    @db.VarChar(200)
+  body       String    @db.LongText
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  user           User?      @relation(fields: [user_id], references: [id])
+  user_id        String?
+  comments       Comment[]
+  post_status    PostStatus @relation(fields: [post_status_id], references: [id])
+  post_status_id String
+
+  @@map(name: "posts")
+}
+
+model PostStatus {
+
+  id   String @id @default(cuid())
+  name String @db.VarChar(50)
+
+  post Post?
+  @@map(name: "post_status")
+}
+
+model Comment {
+
+  id         String    @id @default(cuid())
+  content    String    @db.VarChar(300)
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  post    Post?   @relation(fields: [post_id], references: [id])
+  post_id String?
+  user    User?   @relation(fields: [user_id], references: [id])
+  user_id String?
+  @@map(name: "comments")
+}
