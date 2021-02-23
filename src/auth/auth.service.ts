@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { Token } from './model/token';
@@ -33,5 +33,9 @@ export class AuthService {
     return {
       value: this.jwtService.sign(payload),
     };
+  }
+
+  async hashPassword(password: string) {
+    return bcrypt.hash(password, 10);
   }
 }

@@ -20,15 +20,14 @@ CREATE TABLE `posts` (
     `updated_at` DATETIME(3),
     `deleted_at` DATETIME(3),
     `user_id` VARCHAR(191),
-    `post_status_id` VARCHAR(191) NOT NULL,
-UNIQUE INDEX `posts_post_status_id_unique`(`post_status_id`),
+    `post_status_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `post_status` (
-    `id` VARCHAR(191) NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
 
     PRIMARY KEY (`id`)
