@@ -4,7 +4,6 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { User } from './model/user';
 import { Token } from '../auth/model/token';
 import { UsersService } from './users.service';
-import * as bcrypt from 'bcryptjs';
 import { LoginArgs } from './dto/args/login-by-email.args';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -31,9 +30,9 @@ export class UsersResolver {
     const foundUser = await this.usersService.getUserByEmail(email);
     if (foundUser) throw new ConflictException();
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.authService.hashPassword(password);
 
-    return await this.usersService.createUser({
+    return this.usersService.createUser({
       ...createUserData,
       password: hashedPassword,
     });

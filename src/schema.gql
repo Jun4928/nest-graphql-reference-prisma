@@ -19,15 +19,52 @@ type Token {
   value: String!
 }
 
+type PostStatus {
+  id: Int!
+  name: String!
+}
+
+type Post {
+  id: String!
+  title: String!
+  body: String!
+  created_at: DateTime!
+  updated_at: DateTime
+  deleted_at: DateTime
+  writer: User!
+  postStatus: PostStatus!
+}
+
 type Query {
   loginByEmail(email: String!, password: String!): Token
+  posts: [Post]!
 }
 
 type Mutation {
   createUser(createUserData: CreateUserInput!): User!
+  createPost(createPostData: CreatePostInput!): Post!
+  updatePost(updatePostData: UpdatePostInput!): Post!
+  deletePost(deletePostInput: DeletePostInput!): Post!
 }
 
 input CreateUserInput {
   email: String!
   password: String!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  post_status_id: Int!
+}
+
+input UpdatePostInput {
+  title: String!
+  body: String!
+  post_status_id: Int!
+  id: String!
+}
+
+input DeletePostInput {
+  id: String!
 }

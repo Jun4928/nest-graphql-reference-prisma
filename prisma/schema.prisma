@@ -31,21 +31,21 @@ model Post {
   updated_at DateTime?
   deleted_at DateTime?
 
-  user           User?      @relation(fields: [user_id], references: [id])
-  user_id        String?
+  user           User       @relation(fields: [user_id], references: [id])
+  user_id        String
   comments       Comment[]
   post_status    PostStatus @relation(fields: [post_status_id], references: [id])
-  post_status_id String
+  post_status_id Int
 
   @@map(name: "posts")
 }
 
 model PostStatus {
 
-  id   String @id @default(cuid())
+  id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
 
-  post Post?
+  post Post[]
   @@map(name: "post_status")
 }
 
@@ -57,9 +57,9 @@ model Comment {
   updated_at DateTime?
   deleted_at DateTime?
 
-  post    Post?   @relation(fields: [post_id], references: [id])
-  post_id String?
-  user    User?   @relation(fields: [user_id], references: [id])
-  user_id String?
+  post    Post   @relation(fields: [post_id], references: [id])
+  post_id String
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
   @@map(name: "comments")
 }
