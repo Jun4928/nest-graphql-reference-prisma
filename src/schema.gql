@@ -24,6 +24,15 @@ type PostStatus {
   name: String!
 }
 
+type Comment {
+  id: String!
+  content: String!
+  created_at: DateTime!
+  updated_at: DateTime
+  deleted_at: DateTime
+  writer: User!
+}
+
 type Post {
   id: String!
   title: String!
@@ -33,6 +42,7 @@ type Post {
   deleted_at: DateTime
   writer: User!
   postStatus: PostStatus!
+  comments: [Comment]!
 }
 
 type Query {
@@ -45,6 +55,7 @@ type Mutation {
   createPost(createPostData: CreatePostInput!): Post!
   updatePost(updatePostData: UpdatePostInput!): Post!
   deletePost(deletePostInput: DeletePostInput!): Post!
+  createComment(createCommentData: CreateCommentInput!): Comment!
 }
 
 input CreateUserInput {
@@ -67,4 +78,9 @@ input UpdatePostInput {
 
 input DeletePostInput {
   id: String!
+}
+
+input CreateCommentInput {
+  post_id: String!
+  content: String!
 }

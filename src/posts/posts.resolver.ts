@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { Post } from './model/post';
 import { User } from 'src/users/model/user';
+import { Comment } from 'src/comments/model/comment';
 import { PostStatus } from './model/postStatus';
 import { Post as PostFromPrisma } from '@prisma/client';
 import { PostsService } from './posts.service';
@@ -35,16 +36,22 @@ export class PostsResolver {
 
   @ResolveField()
   async writer(@Parent() postFromPrisma: PostFromPrisma): Promise<User> {
-    const { id } = postFromPrisma;
-    return this.postsService.getUserFromPost(id);
+    const { user_id } = postFromPrisma;
+    return this.postsService.getUserFromPost(user_id);
   }
 
   @ResolveField()
   async postStatus(
     @Parent() postFromPrisma: PostFromPrisma,
   ): Promise<PostStatus> {
-    const { id } = postFromPrisma;
-    return this.postsService.getPostStatusFromPost(id);
+    const { post_status_id } = postFromPrisma;
+    return this.postsService.getPostStatusFromPost(post_status_id);
+  }
+
+  @ResolveField()
+  async comments(@Parent() postFromPrimsa: PostFromPrisma): Promise<Comment[]> {
+    const { id: post_id } = postFromPrimsa;
+    return this.postsService.getCommentsFromPost(post_id);
   }
 
   @Mutation(() => Post)

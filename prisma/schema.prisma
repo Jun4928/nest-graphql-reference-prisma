@@ -31,7 +31,7 @@ model Post {
   updated_at DateTime?
   deleted_at DateTime?
 
-  user           User       @relation(fields: [user_id], references: [id])
+  writer         User       @relation(fields: [user_id], references: [id])
   user_id        String
   comments       Comment[]
   post_status    PostStatus @relation(fields: [post_status_id], references: [id])
@@ -59,7 +59,7 @@ model Comment {
 
   post    Post   @relation(fields: [post_id], references: [id])
   post_id String
-  user    User   @relation(fields: [user_id], references: [id])
+  writer  User   @relation(fields: [user_id], references: [id])
   user_id String
   @@map(name: "comments")
 }
