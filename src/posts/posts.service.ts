@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Post as PostFromPrisma } from '@prisma/client';
+import {
+  Post as PostFromPrisma,
+  Comment as CommentFromPrisma,
+  User as UserFromPrisma,
+} from '@prisma/client';
 import { CreatePostInput } from './dto/input/create-post.input';
 import { UpdatePostInput } from './dto/input/update-post.input';
 import { DeletePostInput } from './dto/input/delete-post.input';
@@ -50,11 +54,21 @@ export class PostsService {
     });
   }
 
-  async getUserFromPost(id: string) {
-    return this.prisma.post.findUnique({ where: { id } }).user();
+  async getUserFromPost(user_id: string) {
+    return this.prisma.user.findUnique({ where: { id: user_id } });
   }
 
-  async getPostStatusFromPost(id: string) {
-    return this.prisma.post.findUnique({ where: { id } }).post_status();
+  async getPostStatusFromPost(post_status_id: number) {
+    return this.prisma.postStatus.findUnique({ where: { id: post_status_id } });
+  }
+
+  async getCommentsFromPost(
+    post_id: string,
+  ): Promise<(CommentFromPrisma & { writer: UserFromPrisma })[]> {
+    return this.prisma.comment.findMany({
+      where: { post_id },
+      include: { writer: true },
+      orderBy: { created_at: 'desc' },
+    });
   }
 }

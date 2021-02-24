@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Post as PostFromPrisma } from '@prisma/client';
 import { User } from '../../users/model/user';
 import { PostStatus } from './postStatus';
+import { Comment } from '../../comments/model/comment';
 
 type PostWithUserAndPostStatus = Omit<
   PostFromPrisma,
@@ -33,4 +34,7 @@ export class Post implements PostWithUserAndPostStatus {
 
   @Field(() => PostStatus)
   postStatus: PostStatus;
+
+  @Field(() => [Comment], { nullable: 'items' })
+  comments: Comment[];
 }
